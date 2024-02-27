@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Заметки</title>
+    <script src="./js/vue.js"></script>
+    <link rel="stylesheet" href="./CSS/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <form class="cardForm" @submit.prevent="createNotes">
+            <p>
+                <label for="GroupName">GroupName:</label>
+                <input id="GroupName" v-model="groupName" placeholder="Group Name">
+            </p>
+            <p>
+                <label for="InputOne">Todo:</label>
+                <input id="InputOne" v-model="inputOne" placeholder="InputOne">
+            </p>
+            <p>
+                <label for="InputTwo">Todo:</label>
+                <input id="InputTwo" v-model="inputTwo" placeholder="InputTwo">
+            </p>
+            <p>
+                <label for="InputThr">Todo:</label>
+                <input id="InputThr" v-model="inputThr" placeholder="InputThr">
+            </p>
+            <p>
+                <label for="InputFor">Todo:</label>
+                <input id="InputFor" v-model="inputFor" placeholder="InputFor">
+            </p>
+            <p>
+                <label for="InputFiv">Todo:</label>
+                <input id="InputFiv" v-model="inputFiv" placeholder="InputFiv">
+            </p>
+            <p>
+                <select v-model.number="important" name="important" id="important">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+
+                </select>
+            </p>
+            <p>
+                <input type="submit" value="Submit">
+            </p>
+        </form>
+        <div class="columns">
+            <div class="column">
+                <h2>Колонка Один
+                    <button class="btndel" @click="deleteAllCardsInColumn(1)">Delete All</button>
+                </h2>
+                <div class="card" v-for="(group, groupIndex) in firstColumn" :key="group.id">
+                    <h3>{{ group.groupName }} - {{group.important}}</h3>
+                    <ul>
+                        <li v-for="(item, itemIndex) in group.items" :key="item.id">
+                            <input type="checkbox" v-model="item.checked" :disabled="isDisabled(groupIndex, item)" :class="{ fixed: item.isFixed }" @change="updateProgress(group)"> {{ item.text }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
+                <h2>Колонка Два
+                    <button class="btndel" @click="deleteAllCardsInColumn(2)">Delete All</button>
+                </h2>
+                <div class="card" v-for="(group, groupIndex) in secondColumn" :key="group.id">
+                    <h3>{{ group.groupName }} - {{group.important}}</h3>
+                    <ul>
+                        <li v-for="item in group.items" :key="item.id">
+                            <input type="checkbox" v-model="item.checked" :disabled="item.checked" @change="updateProgress(group)"> {{ item.text }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
+                <h2>Колонка Три
+                    <button class="btndel" @click="deleteAllCardsInColumn(3)">Delete All</button>
+                </h2>
+                <div v-for="group in thirdColumn" :key="group.id">
+                    <div class="card">
+                        <h3>{{ group.groupName }} - {{group.important}}</h3>
+                        <ul>
+                            <li v-for="item in group.items" :key="item.id">
+                                <input type="checkbox" v-model="item.checked" :disabled="item.checked"> {{ item.text }}
+                            </li>
+                        </ul>
+                        <p v-if="group.isComplete">{{ group.lastChecked }}</p>
+                        <button class="btndel" @click="deleteNoteGroup(group.id)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
